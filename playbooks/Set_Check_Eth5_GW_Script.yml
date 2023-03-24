@@ -1,0 +1,26 @@
+- name: Set Reserv GW Checker
+  hosts: Mikrotiks
+  gather_facts: false
+  tasks:
+    - name: Add Script for check LTE state
+      community.routeros.command:
+        commands:
+          - /system script add dont-require-permissions=no name=Enable_ether5_IF owner=ansehnlich policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source=":if ([interface/ethernet/get number=[find name=ether5] disabled] = true) do={:log warning \"ether5 interface is disabled\";/interface lte set number=[find name=ether5] disabled=no;:log warning \"ether5 interface is switched to enable\";} else {:log warning \"ether5 interface is enabled\";}"
+    - name: Create Enabling IF Shedule
+      community.routeros.command:
+        commands:
+          - /system scheduler add interval=10m name=Check_ether5_State on-event=Enable_ether5_IF policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon start-time=20:00:00
+#    - name: Add Gateway for Checks
+#      community.routeros.command:
+#        commands:
+#          - :global RESERVGATE [/ip route get value-name=gateway number=[find comment~"ping_bahn2"]]
+#          - /ip route add comment=CheckReservGW disabled=no distance=1 dst-address=77.88.8.8/32 gateway=$RESERVGATE pref-src="" routing-table=main scope=10 suppress-hw-offload=no target-scope=10
+    - name: Add Script
+      community.routeros.command:
+        commands:
+          - /system script add dont-require-permissions=no name=Check_Reserved_GW owner=Bierfuhrer policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source=":if ([/ping 77.88.8.8 count=20 interval=500ms interface=ether5] = 0) do={:log error \"Host is not responding to ping request via reserved ether5 interface.\";}\r\
+            \n:if ([/ping 77.88.8.8 count=20 interval=500ms interface=ether5] < 14) do={:log error \"Host is bad responding to ping request via reserved ether5 interface\";} else {:log warning \"Host ping via reserved ether5 interface is OK\";}"
+    - name: Add Shedule
+      community.routeros.command:
+        commands:
+          - /system scheduler add interval=5m name=Init_check_Reserved_GW on-event=Check_Reserved_GW policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon start-time=20:05:00
