@@ -1,0 +1,21 @@
+---
+- name: Set NTP-Servers
+  hosts: Mikrotiks
+  gather_facts: false
+  tasks:
+    - name: Add NTP-Servers
+      community.routeros.command:
+        commands:
+          - /system ntp client servers add address=0.ru.pool.ntp.org
+          - /system ntp client servers add address=1.ru.pool.ntp.org
+          - /system ntp client servers add address=2.ru.pool.ntp.org
+          - /system ntp client servers add address=3.ru.pool.ntp.org
+          - /system ntp client set enabled=yes
+    - name: Get NTP-Servers
+      community.routeros.command:
+        commands:
+          - /system ntp client print
+      register: get_ntp_srv
+    - name: Print NTP-Servers
+      ansible.builtin.debug:
+        var: get_ntp_srv.stdout_lines

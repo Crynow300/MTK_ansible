@@ -1,0 +1,16 @@
+- name: "Update banner"
+  hosts: Mikrotiks
+  gather_facts: false
+  tasks:
+    - name: Check for Updates
+      community.routeros.command:
+        commands:
+          - /system package update check-for-updates
+      register: check_result
+    - name: Print Check Result
+      ansible.builtin.debug:
+        var: check_result.stdout_lines
+    - name: Upgrade Firmware
+      community.routeros.command:
+        commands:
+          - /system package update install

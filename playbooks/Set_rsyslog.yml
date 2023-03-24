@@ -1,0 +1,16 @@
+- name: "Set rsyslog"
+  hosts: Mikrotiks
+  gather_facts: false
+  tasks:
+    - name: Remove Remote Actions
+      community.routeros.command:
+        commands:
+          - /system logging remove numbers=[find action=remote]
+    - name: set rsyslog
+      community.routeros.command:
+        commands:
+          - /system logging add action=remote topics=info
+          - /system logging add action=remote topics=error
+          - /system logging add action=remote topics=warning
+          - /system logging add action=remote topics=critical
+          - /system logging action set 3 remote=10.1.1.20 remote-port=55514

@@ -1,0 +1,23 @@
+- name: Setup SNMPV3
+  hosts: Mikrotiks
+  gather_facts: false
+  tasks:
+    - name: Setup SNMPV3
+      community.routeros.command:
+        commands:
+          - :global SN [system routerboard get serial-number]
+          - /snmp community add name=zabbix authentication-protocol=MD5 authentication-password=9d19c21e61c656a2ff0c22317a561dd4 encryption-protocol=DES encryption-password=9d19c21e61c656a2ff0c22317a561dd4 security=private addresses=185.201.44.111
+          - /snmp set contact=sysadmin@pivtochka.com engine-id=$SN trap-community=zabbix trap-generators=interfaces trap-version=3 trap-target=185.201.44.111 src-address="::"
+           - /snmp set enabled=yes
+    - name: Get SNMP Overvieiw
+      community.routeros.command:
+        commands:
+          - /snmp print
+      register: get_snmp
+    - name: Print SNMP Overciew
+      ansible.builtin.debug:
+        var: get_snmp.stdout_lines
+    - name: Add firewall rule
+      community.routeros.command:
+        commands:
+          - /ip firewall filter add chain=input action=accept protocol=udp src-address=185.201.44.111 dst-port=161 log=no log-prefix="" place-before=3 comment="Allow SNMP"

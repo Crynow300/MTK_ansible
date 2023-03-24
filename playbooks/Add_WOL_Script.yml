@@ -1,0 +1,23 @@
+- name: Add WOL Schedule Script
+  hosts: Mikrotiks
+  gather_facts: false
+  tasks:
+    - name: Add Schedule Script
+      community.routeros.command:
+        commands:
+          - :global MACMK [ip dhcp-server lease get [find host-name~"MK"] mac-address]
+          - /system scheduler add interval=1d name=send_magic_to_POS on-event="/tool wol interface=bridge mac=$MACMK" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon start-time=08:30:00
+      tags:
+        - configure
+    - name: Get Scheduler
+      community.routeros.command:
+        commands:
+          - /system scheduler print
+      register: result
+      tags:
+        - print_result
+    - name: Print result
+      ansible.builtin.debug:
+        var: print.stdout_lines
+      tags:
+        - print_result

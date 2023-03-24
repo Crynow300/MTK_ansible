@@ -1,0 +1,16 @@
+- name: Set Mikrotik Cloud
+  hosts: Mikrotiks
+  gather_facts: false
+  tasks:
+    - name: Set Mikrotik Cloud
+      community.routeros.command:
+        commands:
+          - /ip cloud set ddns-enabled=yes update-time=yes
+    - name: Get Mikrotik Cloud Settings
+      community.routeros.command:
+        commands:
+          - /ip cloud print
+      register: result
+    - name: Print Mikrotik Cloud Settings
+      ansible.builtin.debug:
+        var: result.stdout_lines
