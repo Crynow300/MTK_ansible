@@ -1,0 +1,35 @@
+- name: Congifure Services
+  hosts: Mikrotiks
+  gather_facts: false
+  tasks:
+    - name: Disable unused Services
+      community.routeros.command:
+        commands:
+          - /ip service disable api
+          - /ip service disable api-ssl
+          - /ip service disable www
+          - /ip service disable www-ssl
+          - /ip service disable telnet
+          - /ip service disable ftp
+      tags:
+        - services_state_setup
+    - name: Add allowed Networks to Winbox and SSH
+      community.routeros.command:
+        commands:
+          - :global BRIDGENET [ip/address/get value-name=network number=[find interface=bridge]]
+          - /ip service set winbox address="192.168.2.87/32,192.168.2.120/32,192.168.2.74/32,192.168.2.61/32,192.168.2.94/32,192.168.2.132/32,5.17.89.39/32,185.201.44.111/32,10.1.1.10/32,$BRIDGENET/28"
+          - /ip service set ssh address="192.168.2.120/32,5.17.89.39/32,185.201.44.111/32"
+      tags:
+        - services_config
+    - name: Get Services Settings
+      community.routeros.command:
+        commands:
+          - /ip service print
+      tags:
+        - services_print
+      register: settings
+    - name: Print Services Settings
+      ansible.builtin.debug:
+        var: settings.stdout_lines
+      tags:
+        - services_print
