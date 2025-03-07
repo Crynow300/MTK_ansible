@@ -7,15 +7,15 @@
         commands:
           - /ip firewall address-list set list=Erlaubnis address=192.168.2.120/32 numbers=0 comment=crynow_sa_pc
           - :local from 1;:local i 0;:foreach id in=[/ip firewall address-list find] do={:if ($i >= $from) do={/ip firewall address-list remove $id}; :set i ($i+1)}
-          - /ip firewall address-list add list=Erlaubnis address=192.168.2.74/32 comment=Aleksey-MacBook
-          - /ip firewall address-list add list=Erlaubnis address=192.168.2.132/32 comment=RM-IT1
-          - /ip firewall address-list add list=Erlaubnis address=192.168.2.94/32 comment=RM-IT-2
-          - /ip firewall address-list add list=Erlaubnis address=192.168.2.87/32 comment=RM-IT3
-          - /ip firewall address-list add list=Erlaubnis address=192.168.2.61/32 comment=RM-IT4
-          - /ip firewall address-list add list=Erlaubnis address=192.168.2.125/32 comment=RM-IT5
+          - /ip firewall address-list add list=Erlaubnis address=192.168.2.74/32 comment=MacBook
+          - /ip firewall address-list add list=Erlaubnis address=192.168.2.132/32 comment=IT-1
+          - /ip firewall address-list add list=Erlaubnis address=192.168.2.94/32 comment=IT-2
+          - /ip firewall address-list add list=Erlaubnis address=192.168.2.87/32 comment=IT-3
+          - /ip firewall address-list add list=Erlaubnis address=192.168.2.61/32 comment=IT-4
+          - /ip firewall address-list add list=Erlaubnis address=192.168.2.125/32 comment=IT-5
           - /ip firewall address-list add list=Erlaubnis address=192.168.2.29/32 comment=W10-KVADM
-          - /ip firewall address-list add list=Erlaubnis address=5.17.89.39/32 comment=Office2
-          - /ip firewall address-list add list=Erlaubnis address=185.201.44.111/32 comment=DC
+          - /ip firewall address-list add list=Erlaubnis address=4.4.4.4/32 comment=Office
+          - /ip firewall address-list add list=Erlaubnis address=1.1.1.1/32 comment=DataCenter
           - /ip firewall address-list add list=Erlaubnis address=10.1.1.20/32 comment=Zabbix
       tags:
         - setup
