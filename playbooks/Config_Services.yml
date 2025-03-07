@@ -17,8 +17,8 @@
       community.routeros.command:
         commands:
           - :global BRIDGENET [ip/address/get value-name=network number=[find interface=bridge]]
-          - /ip service set winbox address="192.168.2.87/32,192.168.2.120/32,192.168.2.74/32,192.168.2.61/32,192.168.2.94/32,192.168.2.132/32,5.17.89.39/32,185.201.44.111/32,10.1.1.10/32,$BRIDGENET/28"
-          - /ip service set ssh address="192.168.2.120/32,5.17.89.39/32,185.201.44.111/32"
+          - /ip service set winbox address="192.168.2.87/32,192.168.2.120/32,192.168.2.74/32,192.168.2.61/32,192.168.2.94/32,192.168.2.132/32,4.4.4.4/32,1.1.1.1/32,10.1.1.10/32,$BRIDGENET/28"
+          - /ip service set ssh address="192.168.2.120/32,4.4.4.4/32,1.1.1.1/32"
       tags:
         - services_config
     - name: Get Services Settings
