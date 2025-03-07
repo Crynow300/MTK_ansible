@@ -1,0 +1,7 @@
+/user add name=ansehnlich group=full password=yourpassword
+/ip service set ssh port=2022
+/ip firewall filter add chain=input protocol=tcp dst-port=2022 src-address=1.1.1.1 action=accept
+/ip firewall filter add chain=input protocol=tcp dst-port=2022 src-address=192.168.100.100 action=accept
+/ip firewall filter add chain=input protocol=tcp dst-port=2022 action=drop
+/certificate import file-name=ssh_certificate.pem 
+/user set ansehnlich ssh-keys=ssh_certificate
