@@ -1,0 +1,17 @@
+---
+- name: Get ext IP
+  hosts: Mikrotiks
+  gather_facts: false
+  tasks:
+    - name: Set IP var
+      community.routeros.command:
+        commands:
+          - :global currentIP [:resolve myip.opendns.com server=208.67.222.222]
+    - name: Print IP var
+      community.routeros.command:
+        commands:
+          - put $currentIP
+      register: ip_var_print
+    - name: Print its output
+      ansible.builtin.debug:
+        var: ip_var_print.stdout_lines
