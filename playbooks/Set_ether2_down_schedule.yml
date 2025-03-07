@@ -1,0 +1,14 @@
+- name: Add ether2 down schedule
+  hosts: Mikrotiks
+  gather_facts: false
+  tasks:
+    - name: Set schedule
+      community.routeros.command:
+        commands:
+          - /system scheduler add name=ether2_down on-event="/interface ethernet set ether2 disabled=yes" \
+             policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon \
+             start-date=sep/02/2023 start-time=00:01:00
+      register: result
+    - name: Print result
+      ansible.builtin.debug:
+        var: result.stdout_lines
