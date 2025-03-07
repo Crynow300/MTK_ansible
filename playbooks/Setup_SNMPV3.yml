@@ -8,7 +8,7 @@
           - :global SN [system routerboard get serial-number]
           - /snmp community add name=zabbix authentication-protocol=MD5 authentication-password=9d19c21e61c656a2ff0c22317a561dd4 encryption-protocol=DES encryption-password=9d19c21e61c656a2ff0c22317a561dd4 security=private addresses=1.1.1.1
           - /snmp set contact=sysadmin@domain.com engine-id=$SN trap-community=zabbix trap-generators=interfaces trap-version=3 trap-target=1.1.1.1 src-address="::"
-           - /snmp set enabled=yes
+          - /snmp set enabled=yes
     - name: Get SNMP Overvieiw
       community.routeros.command:
         commands:
@@ -20,4 +20,4 @@
     - name: Add firewall rule
       community.routeros.command:
         commands:
-          - /ip firewall filter add chain=input action=accept protocol=udp src-address=185.201.44.111 dst-port=161 log=no log-prefix="" place-before=3 comment="Allow SNMP"
+          - /ip firewall filter add chain=input action=accept protocol=udp src-address=1.1.1.1 dst-port=161 log=no log-prefix="" place-before=3 comment="Allow SNMP"
