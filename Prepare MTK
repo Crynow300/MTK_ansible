@@ -3,5 +3,4 @@
 /ip firewall filter add chain=input protocol=tcp dst-port=2022 src-address=1.1.1.1 action=accept
 /ip firewall filter add chain=input protocol=tcp dst-port=2022 src-address==192.168.2.29/3 action=accept
 /ip firewall filter add chain=input protocol=tcp dst-port=2022 action=drop
-/certificate import file-name=ssh_certificate.pem 
-/user set ansehnlich ssh-keys=ssh_certificate
+/user ssh-keys import public-key-file=id_rsa_ansible.pub user=ansehnlich
